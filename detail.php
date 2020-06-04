@@ -1,31 +1,83 @@
 <?php
-/*
-// test env
-$_POST['title'] = "1";
-$_POST['unit'] = "1";
-$_POST['price'] = "1";
-$_POST['img'] = "1";
-*/
+
+// // test env
+// $_POST['title'] = "1";
+// $_POST['unit'] = "1";
+// $_POST['price'] = "1";
+// $_POST['img'] = "1";
+
 
 if(!isset($_POST['title']) || !isset($_POST['price'])){
-    header('index.php');
+    header('Location: index.php');
     return false;
 }
 
 require('vendor/autoload.php');
 
 MercadoPago\SDK::setAccessToken('APP_USR-6317427424180639-042414-47e969706991d3a442922b0702a0da44-469485398');
+MercadoPago\SDK::setIntegratorId('dev_24c65fb163bf11ea96500242ac130004');
 
 $preference = new MercadoPago\Preference();
 
 $item = new MercadoPago\Item();
+$item->id = "1234";
+$item->description = "Dispositivo móvil de Tienda e-commerce";
 $item->title = $_POST['title'];
 $item->quantity = $_POST['unit'];
 $item->unit_price = $_POST['price'];
+// $item->picture_url = "https://" . $_SERVER['SERVER_NAME'] . "/" . $_POST['img'];
+$item->picture_url = "https://slowold-mp-commerce-php.herokuapp.com/" . $_POST['img'];
 
+$payer = new MercadoPago\Payer();
+$payer->name ="Lalo";
+$payer->surname ="Landa";
+$payer->email ="test_user_63274575@testuser.com";
+$payer->phone->area_code ="11";
+$payer->phone->number ="22223333";
+$payer->address->zip_code ="1111";
+$payer->address->street_name ="False";
+$payer->address->street_number ="123";
+
+// $preference->back_urls = array(
+//     "success" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=success",
+//     "pending" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=pending",
+//     "failure" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=failure"
+// );
+
+$preference->back_urls = array(
+    "success" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=success",
+    "pending" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=pending",
+    "failure" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=failure"
+);
+
+
+$preference->payment_methods = array(
+    "excluded_payment_methods" => array(
+      array("id" => "amex")
+    ),
+    "excluded_payment_types" => array(
+        array("id" => "atm")
+    ),
+    "installments" => 6
+  );
+
+
+$preference->auto_return = "approved";
+$preference->external_reference = "pablops3@gmail.com";
 $preference->items = array($item);
-$preference->save();
+$preference->payer = $payer;
 
+if ($preference->save()) { 
+    echo $preference->status; 
+} else {
+    echo $preference->error; // You can get just a brief error description 
+    // or explore each cause
+    foreach($preference->error->causes as $cause) {
+        // You may show a custom error message according to our cause error codes.
+        echo $cause->code . ' ' . $cause->description; 
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -583,12 +635,7 @@ $preference->save();
                                             <?php echo "Cantidad: " . $_POST['unit'] ?>
                                         </h3>
                                     </div>
-                                    <?php // <button type="submit" class="mercadopago-button" formmethod="post">Pagar</button> ?>
-                                    <form action="/procesar-pago" method="POST">
-                                        <script src="https://www.mercadopago.cl/integrations/v1/web-payment-checkout.js"
-                                        data-preference-id="<?php echo $preference->id; ?>">
-                                        </script>
-                                    </form>
+                                    <a href="<?php echo $preference->init_point; ?>"><button type="submit" class="mercadopago-button" formmethod="post">Pagar la compra</button></a>
                                 </div>
                             </div>
                         </div>
