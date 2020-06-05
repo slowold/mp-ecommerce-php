@@ -25,30 +25,36 @@ $item->description = "Dispositivo móvil de Tienda e-commerce";
 $item->title = $_POST['title'];
 $item->quantity = $_POST['unit'];
 $item->unit_price = $_POST['price'];
-// $item->picture_url = "https://" . $_SERVER['SERVER_NAME'] . "/" . $_POST['img'];
-$item->picture_url = "https://slowold-mp-commerce-php.herokuapp.com/" . $_POST['img'];
+$item->picture_url = "https://" . $_SERVER['SERVER_NAME'] . "/" . $_POST['img'];
+// $item->picture_url = "https://slowold-mp-commerce-php.herokuapp.com/" . $_POST['img'];
 
 $payer = new MercadoPago\Payer();
 $payer->name ="Lalo";
+$payer->first_name ="Lalo";
 $payer->surname ="Landa";
+$payer->last_name ="Landa";
 $payer->email ="test_user_63274575@testuser.com";
-$payer->phone->area_code ="11";
-$payer->phone->number ="22223333";
-$payer->address->zip_code ="1111";
-$payer->address->street_name ="False";
-$payer->address->street_number ="123";
-
-// $preference->back_urls = array(
-//     "success" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=success",
-//     "pending" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=pending",
-//     "failure" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=failure"
-// );
+$payer->phone = array(
+    "area_code" => "11",
+    "numer" => "22223333"
+);
+$payer->address = array(
+    "zip_code" => "1111",
+    "street_name" => "False",
+    "street_number" => "123"
+);
 
 $preference->back_urls = array(
-    "success" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=success",
-    "pending" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=pending",
-    "failure" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=failure"
+    "success" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=success",
+    "pending" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=pending",
+    "failure" => "http://" . $_SERVER['SERVER_NAME'] . "/back.php?status=failure"
 );
+
+// $preference->back_urls = array(
+//     "success" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=success",
+//     "pending" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=pending",
+//     "failure" => "https://slowold-mp-commerce-php.herokuapp.com/back.php?status=failure"
+// );
 
 
 $preference->payment_methods = array(
@@ -70,10 +76,8 @@ $preference->payer = $payer;
 if ($preference->save()) { 
     echo $preference->status; 
 } else {
-    echo $preference->error; // You can get just a brief error description 
-    // or explore each cause
+    echo $preference->error;
     foreach($preference->error->causes as $cause) {
-        // You may show a custom error message according to our cause error codes.
         echo $cause->code . ' ' . $cause->description; 
         exit();
     }
