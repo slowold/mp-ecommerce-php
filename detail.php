@@ -36,7 +36,7 @@ $payer->last_name ="Landa";
 $payer->email ="test_user_63274575@testuser.com";
 $payer->phone = array(
     "area_code" => "11",
-    "numer" => "22223333"
+    "number" => "22223333"
 );
 $payer->address = array(
     "zip_code" => "1111",
@@ -79,8 +79,8 @@ if ($preference->save()) {
     echo $preference->error;
     foreach($preference->error->causes as $cause) {
         echo $cause->code . ' ' . $cause->description; 
-        exit();
     }
+    // return false;
 }
 ?>
 
@@ -541,7 +541,7 @@ if ($preference->save()) {
 
 
 
-<body class="as-theme-light-heroimage">
+<body class="as-theme-light-heroimage" style="min-height: 100%;">
 
     <div class="stack">
 
