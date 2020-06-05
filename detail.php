@@ -61,7 +61,7 @@ $preference->payment_methods = array(
     "installments" => 6
   );
 
-
+$preference->notification_url = "https://slowold-mp-commerce-php.herokuapp.com/webhook.php";
 $preference->auto_return = "approved";
 $preference->external_reference = "pablops3@gmail.com";
 $preference->items = array($item);
