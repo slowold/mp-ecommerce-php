@@ -8,7 +8,6 @@ switch($_GET['status']){
         $mensaje = "Hemos registrado su pago exitosamente. A continuación podrá ver los datos correspondientes: <br>";
         $mensaje .= "<b>Método de pago:</b> " . $_GET['payment_type'] . "<br>";
         $mensaje .= "<b>Referencia externa:</b> " . $_GET['external_reference'] . "<br>";
-        $mensaje .= "<b>Método de pago:</b> " . $_GET['payment_type'] . "<br>";
         $mensaje .= "<b>ID de pago:</b> " . $_GET['collection_id'] . "<br>";
     break;
     case 'pending':
