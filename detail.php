@@ -2,6 +2,16 @@
 
 require_once 'vendor/autoload.php';
 
+$preference = new MercadoPago\Preference();
+
+$item = new MercadoPago\Item();
+$item->title = $_POST['title'];
+$item->quantity = $_POST['unit'];
+$item->unit_price = $_POST['price'];
+
+$preference->items = array($item);
+$preference->save();
+
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +27,7 @@ require_once 'vendor/autoload.php';
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="format-detection" content="telephone=no">
-    <script src="https://www.mercadopago.com/v2/security.js" view="home"></script>
+    <script src="https://www.mercadopago.com/v2/security.js" view="item"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
@@ -559,7 +569,12 @@ require_once 'vendor/autoload.php';
                                             <?php echo "Cantidad: " . $_POST['unit'] ?>
                                         </h3>
                                     </div>
-                                    <button type="submit" class="mercadopago-button" formmethod="post">Pagar</button>
+                                    <?php // <button type="submit" class="mercadopago-button" formmethod="post">Pagar</button> ?>
+                                    <form action="/procesar-pago" method="POST">
+                                        <script src="https://www.mercadopago.cl/integrations/v1/web-payment-checkout.js"
+                                        data-preference-id="<?php echo $preference->id; ?>">
+                                        </script>
+                                    </form>
                                 </div>
                             </div>
                         </div>
